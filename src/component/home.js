@@ -9,6 +9,7 @@ export class Home extends React.Component{
         super();
     }
     render(){
+
         return(
         <div className="shell">
             <Head/>

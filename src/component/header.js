@@ -1,5 +1,6 @@
 import React from 'react';
 import '../css/style.css';
+import * as userService from '../service/userService';
 import {Link} from 'react-router-dom';
 class Logo extends React.Component{
     constructor() {
@@ -62,18 +63,32 @@ class Cart extends React.Component{
     constructor() {
         super();
     }
+
     render(){
+        const user=JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        if(user!=null){
         return(
             <div id="navigation">
                 <ul>
+                  <Ulinner name={"你好  "+user.username} url="#"/>
                  <Ulinner name="主页" url="/home" />
-                 <Ulinner name="分类" url="#" />
-                 <Ulinner name="我的" url="#" />
-                 <Ulinner name="店铺" url="#" />
+                 <button onClick={userService.logout}>退出登录</button>
                 </ul>
            </div>
         );
     }
+    else{
+        return(
+            <div id="navigation">
+                <ul>
+                    <Ulinner name="主页" url="/home" />
+                    <Ulinner name="未登录" url="#"/>
+                </ul>
+            </div>
+        );
+        }}
+
   }
 export  class Head extends React.Component{
     constructor() {

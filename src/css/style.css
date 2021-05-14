@@ -42,7 +42,10 @@ h1#logo a{ display:block; height:64px; text-indent: -4000px; background:url(../i
 #navigation ul li a{ float:left; height:64px; line-height:64px; text-decoration: none; color:#fff; padding:0 15px;}
 #navigation ul li a.active,
 #navigation ul li a:hover{ background:#fff; color:#8b0000; }
-
+#navigation ul button { float:left; display:inline; }
+#navigation ul button { float:left; height:64px; line-height:64px; text-decoration: none; color:black; padding:0 15px;}
+#navigation ul button ,
+#navigation ul button { background:#8b0000; color:white; }
 #cart { float:right; width:160px; top:50px; right:0; height:51px; background:#8b0000; color:#fff; padding:13px 10px 0 10px; white-space:nowrap; line-height:30px;font-size: 15px}
 a.cart-link { color:#fff; background:url(../img/cart-link.gif) no-repeat 0 0; padding:0 0 0 32px; text-decoration: none;}
 a.cart-link:hover { text-decoration: underline;}

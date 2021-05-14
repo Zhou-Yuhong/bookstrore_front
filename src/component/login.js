@@ -1,6 +1,7 @@
 import  '../css/login.css';
 import React from 'react';
 import {Link} from "react-router-dom";
+import * as userService from '../service/userService'
 import Nav from"../nav"
 export class Inputbox extends React.Component{
     constructor(props) {
@@ -10,8 +11,7 @@ export class Inputbox extends React.Component{
     render(){
         return(
          <div className="inputBox">
-             <input t
-                    ype="text" name required />
+             <input type="text" name required />
              <label>{this.data}</label>
          </div>
         );
@@ -60,6 +60,18 @@ export class Login extends  React.Component{
             password:""
         }
     }
+    handleSubmit =(event)=> {
+        console.log("发送login请求");
+      let values={
+          username:this.state.username,
+          password:this.state.password
+      }
+      // console.log(this.state.username);
+      // console.log(this.state.password);
+      // console.log(values);
+      userService.login(values);
+    };
+
     handle_input_username=(event)=>{
        this.setState( {
            username:event.target.value
@@ -95,7 +107,7 @@ export class Login extends  React.Component{
                         <label>Password</label>
                     </div>
                     <Link to={"/home"}>
-                        <input type="submit" onClick={this.login_info} name value="登录" />
+                        <input type="submit" onClick={this.handleSubmit} name value="登录" />
                     </Link>
                     <Link to={"register"}>
                     <input type="submit" name value="注册" />
