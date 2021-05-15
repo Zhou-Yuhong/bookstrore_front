@@ -1,6 +1,8 @@
 import '../css/cart.css';
 import React from 'react';
 import  {Head} from './header';
+import {setOrders} from "../service/orderService";
+
 const cart_book1={
     src:"img/cart_book1.jpg",name:"骆驼祥子",writer:"老舍",piece:1,money:20.3,if_chosen:false,cart_id:0
 }
@@ -13,6 +15,16 @@ const cart_book3={
 const book_list=[
   cart_book1,cart_book2,cart_book3
 ];
+function creat_order_product(product_id,name,num,price,image,author){
+     var order_product=new Object();
+     order_product.product_id=product_id;
+     order_product.name=name;
+     order_product.num=num;
+     order_product.price=price;
+     order_product.image=image;
+     order_product.author=author;
+     return order_product;
+}
 class Searchdiv extends React.Component{
     constructor() {
         super();
@@ -191,7 +203,62 @@ class Payline extends React.Component{
         sum=this.props.sum;
         return sum;
     }
-
+    submit_order=(event)=>{
+        const order=JSON.parse(localStorage.getItem("cart"));
+        const user=JSON.parse(localStorage.getItem("user"));
+        console.log(order);
+        let totle=0;
+        let sum=0;
+        let state=0;
+        let order_products=[];
+        for(let i=order.length-1;i>=0;i--){
+            if(order[i].if_chosen){
+                var order_product=creat_order_product(order[i].id,order[i].name,order[i].num,order[i].price,order[i].image,order[i].author);
+                order_products.push(order_product);
+                totle++;
+                sum+=order[i].num*order[i].price;
+                order.splice(i,1);
+            }
+        }
+        localStorage.setItem("cart",JSON.stringify(order));
+        //获取当前时间
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+        // if (month < 10) {
+        //     month = "0" + month;
+        // }
+        // if (day < 10) {
+        //     day = "0" + day;
+        // }
+        let nowDate = year + "年" + month + "月" + day+"日";
+        let order_info={
+            username:user.username,
+            order_time:nowDate,
+            num:totle,
+            value:sum,
+            state:0
+        }
+        let data={
+            order_info:order_info,
+            order_products:order_products
+        }
+        // for(let j=0;j<totle;j++){
+        //     data["product_id"+j]=order_products[j].product_id;
+        //     data["name"+j]=order_products[j].name;
+        //     data["num"+j]=order_products[j].num;
+        //     data["price"+j]=order_products[j].price;
+        //     data["image"+j]=order_products[j].image;
+        //     data["author"+j]=order_products[j].author;
+        // }
+        console.log(data);
+        const callback=()=>{
+            let accc=2333;
+        }
+        setOrders(data,callback);
+        alert("订单已提交");
+    }
 
     render(){
         return(
@@ -214,7 +281,7 @@ class Payline extends React.Component{
                     <li>已经选择<span>{this.payline_itemnum()}</span>件商品</li>
                     <li>总价 <span>￥{this.props.sum}</span></li>
                     <li>
-                        <button className="butt">去结算</button>
+                        <button onClick={this.submit_order} className="butt">去结算</button>
 
                     </li>
 

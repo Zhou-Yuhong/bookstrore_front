@@ -66,12 +66,13 @@ class Cart extends React.Component{
 
     render(){
         const user=JSON.parse(localStorage.getItem("user"));
-        console.log("user"+user);
+        //console.log("user"+user);
         if(user!=null){
         return(
             <div id="navigation">
                 <ul>
                   <Ulinner name={"你好  "+user.username} url="#"/>
+                    <Ulinner name="我的订单" url="/order" />
                  <Ulinner name="主页" url="/home" />
                  <button onClick={userService.logout}>退出登录</button>
                 </ul>

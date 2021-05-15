@@ -305,12 +305,15 @@ export class Content extends React.Component{
     componentDidMount() {
 
         const callback =  (data) => {
-            console.log(data);
+            //console.log(data);
             this.setState({product_array:data});
         };
 
         getBooks({"search":null}, callback);
-        console.log(this.state.product_array)}
+        const user=JSON.parse(localStorage.getItem("user"));
+        //console.log("内存的user"+user.username);
+        //console.log(this.state.product_array)
+        }
     //退出搜索模式
     clear_search=()=>{
         this.setState(
@@ -338,11 +341,6 @@ export class Content extends React.Component{
         )
         console.log(this.state.search);
     }
-    // search_book_lower=(lower)=>{
-    //     let tmp_cart=this.state.product_array;
-    //     let filter_cart=tmp_cart.filter((it)=>it.money>=lower);
-    //
-    // }
     //显示所有书籍
     render_product=(books)=>{
         let bk_array=[];

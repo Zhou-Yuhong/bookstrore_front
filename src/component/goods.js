@@ -169,6 +169,7 @@ export class Goods extends React.Component{
             cart.push(gift);
         }
         localStorage.setItem("cart",JSON.stringify(cart));
+        alert("加入购物车成功");
     }
     render() {
         return(

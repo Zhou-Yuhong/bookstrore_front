@@ -19,6 +19,13 @@ export const login=(data)=>{
     };
     postRequest(url,data,callback);
 };
+export const register=(data)=>{
+    const url=`${apiUrl}/register`;
+    const callback=(data)=>{
+        history.push("/login");
+    }
+    postRequest(url,data,callback);
+}
 export const logout= () => {
     const url=`${apiUrl}/logout`;
     const callback=(data)=>{

@@ -71,6 +71,13 @@ export class Login extends  React.Component{
       // console.log(values);
       userService.login(values);
     };
+    handleRegister=(event)=>{
+        let values={
+            username:this.state.username,
+            password:this.state.password
+        }
+        userService.register(values);
+    }
 
     handle_input_username=(event)=>{
        this.setState( {
@@ -110,7 +117,7 @@ export class Login extends  React.Component{
                         <input type="submit" onClick={this.handleSubmit} name value="登录" />
                     </Link>
                     <Link to={"register"}>
-                    <input type="submit" name value="注册" />
+                    <input type="submit" onClick={this.handleRegister} name value="注册" />
                     </Link>
                 </form>
             </div>

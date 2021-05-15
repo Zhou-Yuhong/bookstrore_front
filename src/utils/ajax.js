@@ -34,8 +34,8 @@ let postRequest = (url, json, callback) => {
         },
         credentials: "include"
     };
-    console.log("url="+url);
-    console.log("opts="+opts);
+    // console.log("url="+url);
+    // console.log("opts="+opts);
     fetch(url,opts)
         .then((response) => {
             return response.json()

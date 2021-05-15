@@ -15,6 +15,4 @@ export const getBook = (id, callback) => {
     else{
         const url = `${apiUrl}/getBook`;
         postRequest_v2(url, id, callback);}
-
-
 };
