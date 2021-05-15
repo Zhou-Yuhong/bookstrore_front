@@ -110,17 +110,18 @@ class Infowarp extends React.Component{
         // this.data3=props.data3;
     }
     handle_reverse_choose=(e)=>{
-        this.props.parent.reverse_choose(this.props.book.cart_id);
+        this.props.parent.reverse_choose(this.props.book.id);
     }
     handle_remove_book=(e)=>{
-        this.props.parent.remove_book(this.props.book.cart_id);
+        console.log(this.props.book.id);
+        this.props.parent.remove_book(this.props.book.id);
     }
     handle_change_booknum=(e)=>{
         let tmp=e.target.value;
         let pro=0;
         if(tmp==='add') pro=0;
         else pro=1;
-        this.props.parent.change_booknum(pro,this.props.book.cart_id);
+        this.props.parent.change_booknum(pro,this.props.book.id);
     }
 
     render(){
@@ -132,17 +133,17 @@ class Infowarp extends React.Component{
                     checked={this.props.book.if_chosen}
                     onChange={this.handle_reverse_choose}
                     /></li>
-                    <li className="info_2"><img src={this.props.book.src} width="80px"/></li>
-                    <li className="info_3"><a>{this.props.book.name}</a></li>
-                    <li className="info_4"><a>作者：{this.props.book.writer}</a></li>
-                    <li className="info_5">￥{this.props.book.money}</li>
+                    <li className="info_2"><img src={this.props.book.image} width="80px"/></li>
+                    <li className="info_3"><a href={"/goods?id="+this.props.book.id}>{this.props.book.name}</a></li>
+                    <li className="info_4"><a>作者：{this.props.book.author}</a></li>
+                    <li className="info_5">￥{this.props.book.price}</li>
                     <li className="info_6">
                         <button value={'sub'} onClick={this.handle_change_booknum}>-</button>
-                        <input type="text" name="" id="" value={this.props.book.piece}/>
+                        <input type="text" name="" id="" value={this.props.book.num}/>
                         <button className="bot" value={'add'} onClick={this.handle_change_booknum}>+</button>
 
                     </li>
-                    <li className="info_7">￥{this.data3}</li>
+                    <li className="info_7">￥{this.props.book.price*this.props.book.num}</li>
                     <li>
                         <a onClick={this.handle_remove_book}>删除</a><br/>
 
@@ -185,13 +186,12 @@ class Payline extends React.Component{
         }
         return count;
     }
-//     payline_delete_chosen=(e)=>{
-//
-// }
-   // payline_getsum=(e)=>{
-   //      console.log(this.props.parent.getsum());
-   //      return this.props.parent.getsum();
-   // }
+    payline_sum=()=>{
+        let sum=0;
+        sum=this.props.sum;
+        return sum;
+    }
+
 
     render(){
         return(
@@ -230,29 +230,37 @@ export class Cart extends React.Component{
          super();
          this.state={
              choose_all:false,
-             book_array:book_list,
+             book_array:[],
              sum:0,    //总价
              search:false,//是否处于搜索状态
              search_array:[], //搜索结果的数组
 
          }
      }
-     //计算总价以及数量
+     componentDidMount() {
+         let cart=localStorage.getItem("cart")
+         ? JSON.parse(localStorage.getItem("cart")) : [];
+         this.setState({
+             book_array:cart,
+         });
+
+     }
+
+    //计算总价以及数量
      check_out=()=>{
          let totle=0;
          let tmp_book_array=this.state.book_array;
          tmp_book_array.map((it)=>{
              if(it.if_chosen==true){
-                 totle+=it.money*it.piece;
+                 totle+=it.price*it.num;
 
              }
          })
          totle=totle.toFixed(2);
-         console.log(totle);
          this.setState(
              {sum:totle},
          );
-
+        return totle;
      }
      //改变是否全选
      reverse_all_choose=()=>{
@@ -274,12 +282,14 @@ export class Cart extends React.Component{
                  this.check_out();
              }
          );
+         //更新localstorage
+         localStorage.setItem("cart",JSON.stringify(this.state.book_array));
      }
      //改变一个商品的选择状态，并反馈
      reverse_choose=(cart_id)=>{
          let tmp_cart=this.state.book_array;
          tmp_cart.map((it)=>{
-             if(cart_id==it.cart_id){
+             if(cart_id==it.id){
                  let chosen2=!it.if_chosen;
                  it.if_chosen=chosen2;
              }
@@ -291,17 +301,22 @@ export class Cart extends React.Component{
               this.check_out();
              }
          );
+         //更新localstorage
+         localStorage.setItem("cart",JSON.stringify(this.state.book_array));
      }
      //删除单个book
      remove_book=(cart_id)=>{
+
        let tmp_cart=this.state.book_array;
-       let filter_cart=tmp_cart.filter(item => item.cart_id != cart_id);
+       let filter_cart=tmp_cart.filter(item => item.id != cart_id);
        this.setState(
            {book_array:filter_cart},
            ()=>{
                this.check_out();
            }
        );
+         //更新localstorage
+         localStorage.setItem("cart",JSON.stringify(this.state.book_array));
     }
     //删除选中book
     remove_select_book=()=>{
@@ -313,19 +328,20 @@ export class Cart extends React.Component{
                  this.check_out();
              }
          );
-
+        //更新localstorage
+        localStorage.setItem("cart",JSON.stringify(this.state.book_array));
     }
     //增加减少book数量,choose为0，加1；choose为1，减1
-    change_booknum=(choose,cart_id)=>{
+    change_booknum=(choose,id)=>{
     let tmp_cart=this.state.book_array;
     for(let i=0;i<tmp_cart.length;i++){
-        if(cart_id==tmp_cart[i].cart_id){
+        if(id==tmp_cart[i].id){
             if(choose==0){
-                tmp_cart[i].piece++;
+                tmp_cart[i].num++;
             }
-            else if(choose==1&&tmp_cart[i].piece>0){
-                tmp_cart[i].piece--;
-                if(tmp_cart[i].piece==0){
+            else if(choose==1&&tmp_cart[i].num>0){
+                tmp_cart[i].num--;
+                if(tmp_cart[i].num==0){
                     //splice函数，删除数组元素
                     tmp_cart.splice(i,1);
                 }
@@ -337,6 +353,8 @@ export class Cart extends React.Component{
         {book_array:tmp_cart},
         ()=>{this.check_out();}
     );
+        //更新localstorage
+        localStorage.setItem("cart",JSON.stringify(this.state.book_array));
 }
 //搜索功能
 search_book=(str)=>{
@@ -390,9 +408,6 @@ clear_search=()=>{
              <Searchdiv parent={this}/>
              <Deliver/>
              <Menue/>
-             {/*<div>*/}
-             {/*    {this.state.search}? {} {this.render_allbook(this.state.book_array)}*/}
-             {/*</div>*/}
               {
                   (!this.state.search)?(
 

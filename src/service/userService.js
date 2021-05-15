@@ -23,7 +23,9 @@ export const logout= () => {
     const url=`${apiUrl}/logout`;
     const callback=(data)=>{
         if(data.status>=0){
+            console.log("退出登录");
             localStorage.removeItem("user");
+            localStorage.removeItem("cart");
             history.push("/login");
             //TODO 增加message处理
         }
@@ -35,6 +37,8 @@ export const logout= () => {
     postRequest(url,{},callback);
 }
 export const checkSession =(callback)=>{
-    const url=`${apiUrl}/checkSession`;
-    postRequest(url,{},callback);
+
+        const url = `${apiUrl}/checkSession`;
+        postRequest(url, {}, callback);
+
 }

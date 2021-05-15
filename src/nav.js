@@ -30,7 +30,7 @@ export class Nav extends React.Component{
                <Switch>
                   <PrivateRoute exact path="/" component={Home}/>
                   <LoginRoute exact path="/login" component={Login}/>
-                  <PrivateRoute exact path="/bookDetails" component={Goods}/>
+                  <PrivateRoute  path="/goods*" component={Goods}/>
                   <PrivateRoute exact path="/cart" component={Cart}/>
                    <Redirect from="/*" to="/"/>
                </Switch>

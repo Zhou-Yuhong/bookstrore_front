@@ -66,7 +66,7 @@ class Cart extends React.Component{
 
     render(){
         const user=JSON.parse(localStorage.getItem("user"));
-        console.log(user);
+        console.log("user"+user);
         if(user!=null){
         return(
             <div id="navigation">
@@ -83,7 +83,7 @@ class Cart extends React.Component{
             <div id="navigation">
                 <ul>
                     <Ulinner name="主页" url="/home" />
-                    <Ulinner name="未登录" url="#"/>
+                    <Ulinner name="登录" url="/login"/>
                 </ul>
             </div>
         );

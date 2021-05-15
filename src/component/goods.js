@@ -1,6 +1,7 @@
 import React from 'react';
 import  {Head} from "./header";
 import '../css/style.css';
+import {getBook} from "../service/bookService";
 const book_modle={
     name:"活着",writer:"余华",price:"23.3",
     intro:"身处荒诞的世界，每个人都该读读余华。经典版本，带你读懂“活着”的力量"
@@ -69,6 +70,7 @@ class Pricebar extends React.Component{
         );
     }
 }
+
 class Goods_inf extends React.Component{
     constructor(props) {
         super(props);
@@ -76,6 +78,7 @@ class Goods_inf extends React.Component{
         this.data2=props.data2;
 
     }
+
     render() {
         return(
             <div className="goods_inf">
@@ -90,44 +93,104 @@ class Goods_inf extends React.Component{
         );
     }
 }
+
+
+
 export class Goods extends React.Component{
     constructor() {
         super();
         this.state={
             book:book_modle,
-            pieces:1
+            num:1
         }
     }
+    componentDidMount(){
+        const callback =  (data) => {
+            console.log(data);
+            this.setState({book:data});
+        };
+        getBook(this.getIdByurl(),callback)
+        //console.log(this.getIdByurl());
+    }
+  getIdByurl=()=>{
+        var search=this.props.location.search;	//获取location的search属性，保存在search中
+        var params={};		//创建空对象params
+        if(search!=""){		//如果search不是空字符串
+            search.slice(1).split("&").forEach(	//?username=zhangdong&pwd=123456;//search去开头?，按&切割为数组，forEach
+                function(val){
+                    var arr=val.split("=");		//将当前元素值按=切割，保存在arr中
+                    params[arr[0]]=parseInt(arr[1]);		//向params中添加一个元素,属性名为arr[0],值为arr[1]
+                }
+            );
+        }
+        return params;
+    }
     addpieces=(e)=>{
-        let num=this.state.pieces;
+        let num=this.state.num;
         num++;
         this.setState(
-            {pieces:num}
+            {num:num}
         )
 
     }
     subpieces=(e)=>{
         if(this.state.pieces===1) return;
-        let num=this.state.pieces;
+        let num=this.state.num;
         num--;
         this.setState(
             {pieces:num}
         )
-
+    }
+    addTocart=(e)=>{
+        console.log(localStorage.getItem("user"));
+        let k=0;
+        let gift={
+            id:this.state.book.id,
+            isbn:this.state.book.isbn,
+            name:this.state.book.name,
+            type:this.state.book.type,
+            author:this.state.book.author,
+            price:this.state.book.price,
+            num:this.state.num,
+            image:this.state.book.image,
+            if_chosen:false
+        }
+        let cart=localStorage.getItem("cart")
+            ? JSON.parse(localStorage.getItem("cart")) : [];
+        for(let i=0;i<cart.length;i++){
+            let item=cart[i];
+            if(item.id==gift.id){
+                item.num+=gift.num;
+            }else{
+                k++;
+            }
+        }
+        if(k==cart.length){
+            cart.push(gift);
+        }
+        localStorage.setItem("cart",JSON.stringify(cart));
     }
     render() {
         return(
             <div className="shell">
                 <Head/>
-                <Goodsclassify  data="名家经典" data2="活着"/>
-                <Goods_pic src="img/alive.jpg"/>
+                <div className="goods_classify">
+                    <a href=" ">全部分类</a>
+                    <span>></span>
+                    <a href=" ">{this.state.book.type}</a>
+                    <span>></span>
+                    <a href=" ">{this.state.book.name}</a>
+                </div>
+                <div className="goods_pic">
+                    <img src={this.state.book.image}  />
+                </div>
 
                 <div className="goods_inf">
                     <h3>
-                        {this.state.book.name}  {this.state.book.writer}
+                        {this.state.book.name} <br/><br/><br/> {this.state.book.author}
                     </h3>
                     <p>
-                        {this.state.book.intro}
+                        {this.state.book.description}
                     </p>
                     <div >
                         <div className="pricebar">
@@ -136,18 +199,18 @@ export class Goods extends React.Component{
                                 <li>数量</li>
                                 <li className="num_li">
                                     <button onClick={this.subpieces}> -</button>
-                                    <input value={this.state.pieces}/>
+                                    <input value={this.state.num}/>
                                     <button onClick={this.addpieces}>+</button>
                                 </li>
                             </ul>
                         </div>
                         <div className="totle">
                             总价
-                            <em>￥{this.state.book.price*this.state.pieces}</em>
+                            <em>￥{this.state.book.price*this.state.num}</em>
                         </div>
                         <div className="operate_btn">
-                            <a href="" className="btn">立即购买</a>
-                            <a href="" className="btn">加入购物车</a>
+                            <button  className="btn">立即购买</button>
+                            <button onClick={this.addTocart} className="btn">加入购物车</button>
                         </div>
                     </div>
                 </div>

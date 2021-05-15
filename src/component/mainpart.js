@@ -1,6 +1,7 @@
 import React from 'react';
 import '../css/style.css';
 import {Ulinner} from "./header";
+import {getBooks} from "../service/bookService";
 import {Side_full} from "./bottom.js"
 import {Switch} from "react-router-dom";
 // <Product_Info url="#" src= {"img/threebody1.jpg"} data="科幻系列" data2="三体1" data3="地球往事" data4="23.33"/>
@@ -198,18 +199,12 @@ export class Slider extends React.Component{
             <div id="slider" className="box">
                 <div id="slider-holder">
                     <ul>
-                        {/*<li><a href="#"><img src="img/slide1.jpg" alt=""/></a></li>*/}
-                        {/*<li><a href="#"><img src="img/slide2.jpg" alt=""/></a></li>*/}
-                        {/*<li><a href="#"><img src="img/slide3.jpg" alt=""/></a></li>*/}
-                        {/*<li><a href="#"><img src="img/slide4.jpg" alt=""/></a></li>*/}
+
                         <li><a href={this.state.url_array[this.state.index]}><img src={this.state.src_array[this.state.index]} alt=""/></a></li>
                     </ul>
                 </div>
                 <div id="slider-nav">
-                    {/*<a href="#">1</a>*/}
-                    {/*<a href="#">2</a>*/}
-                    {/*<a href="#">3</a>*/}
-                    {/*<a href="#">4</a>*/}
+
                     <Switch_button  change_index={this.change_index}  index={0}/>
                     <Switch_button  change_index={this.change_index}  index={1}/>
                     <Switch_button  change_index={this.change_index}  index={2}/>
@@ -223,18 +218,23 @@ export class Slider extends React.Component{
 class Product_Info extends React.Component{
     constructor(props) {
         super(props);
-
+        this.id=this.props.book.id;
+    }
+    test(){
+        console.log("111");
     }
     render(){
         return(
             <li>
-                <a href={this.props.book.url}><img src={this.props.book.src} alt=""/></a>
+                {/*<a href={this.props.book.url}><img src={this.props.book.src} alt=""/></a>*/}
+                <a  href={"/goods?id="+this.id} className="product-img" ><img src={this.props.book.image} alt=""/></a>
                 <div className="product-info">
                     <h3>书本信息</h3>
                     <div className="product-desc">
-                        <h4>{this.props.book.series}</h4>
-                        <p>{this.props.book.name1}<br/>{this.props.book.name2} </p>
-                        <strong ClassName="price">￥{this.props.book.money}</strong>
+                        <h4>{this.props.book.type}</h4>
+
+                        <p>{"作者"+this.props.book.author}<br/>{this.props.book.name} </p>
+                        <strong ClassName="price">￥{this.props.book.price}</strong>
                     </div>
                 </div>
             </li>
@@ -295,13 +295,22 @@ export class Content extends React.Component{
     constructor() {
         super();
         this.state={
-            product_array:book_list,
+            product_array:[],
             search:false,
             search_array:[],
             // search_lower_bound:0,
             // search_upper_bound:500
         }
     }
+    componentDidMount() {
+
+        const callback =  (data) => {
+            console.log(data);
+            this.setState({product_array:data});
+        };
+
+        getBooks({"search":null}, callback);
+        console.log(this.state.product_array)}
     //退出搜索模式
     clear_search=()=>{
         this.setState(
