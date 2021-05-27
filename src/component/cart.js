@@ -15,14 +15,10 @@ const cart_book3={
 const book_list=[
   cart_book1,cart_book2,cart_book3
 ];
-function creat_order_product(product_id,name,num,price,image,author){
+function creat_order_product(product_id,num){
      var order_product=new Object();
      order_product.product_id=product_id;
-     order_product.name=name;
      order_product.num=num;
-     order_product.price=price;
-     order_product.image=image;
-     order_product.author=author;
      return order_product;
 }
 class Searchdiv extends React.Component{
@@ -213,7 +209,7 @@ class Payline extends React.Component{
         let order_products=[];
         for(let i=order.length-1;i>=0;i--){
             if(order[i].if_chosen){
-                var order_product=creat_order_product(order[i].id,order[i].name,order[i].num,order[i].price,order[i].image,order[i].author);
+                var order_product=creat_order_product(order[i].id,order[i].num,);
                 order_products.push(order_product);
                 totle++;
                 sum+=order[i].num*order[i].price;
