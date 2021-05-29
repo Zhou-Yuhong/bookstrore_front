@@ -202,7 +202,7 @@ class Payline extends React.Component{
     submit_order=(event)=>{
         const order=JSON.parse(localStorage.getItem("cart"));
         const user=JSON.parse(localStorage.getItem("user"));
-        console.log(order);
+        console.log(user);
         let totle=0;
         let sum=0;
         let state=0;
@@ -230,7 +230,7 @@ class Payline extends React.Component{
         // }
         let nowDate = year + "年" + month + "月" + day+"日";
         let order_info={
-            username:user.username,
+            userid:user.userId,
             order_time:nowDate,
             num:totle,
             value:sum,

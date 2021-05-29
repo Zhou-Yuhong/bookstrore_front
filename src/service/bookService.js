@@ -8,6 +8,7 @@ export const getBooks = (data, callback) => {
 };
 
 export const getBook = (id, callback) => {
+    console.log(id);
     if(typeof id=='number'){
     const data = {id: id};
     const url = `${apiUrl}/getBook`;

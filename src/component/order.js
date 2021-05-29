@@ -92,7 +92,7 @@ export class Order extends React.Component{
         const user=JSON.parse(localStorage.getItem("user"));
 
         let value={
-            username:user.username
+            userid:user.userId
         }
         console.log(value);
         getOrders(value,callback);
