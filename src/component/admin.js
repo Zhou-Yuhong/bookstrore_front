@@ -36,6 +36,10 @@ export class Admin extends React.Component{
              series_get:""
         }
     }
+   componentDidMount() {
+       const user=JSON.parse(localStorage.getItem("user"));
+       console.log(user);
+   }
 
     get_bookname=(e)=>{
         this.setState(
