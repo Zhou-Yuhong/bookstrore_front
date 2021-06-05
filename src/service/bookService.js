@@ -17,3 +17,18 @@ export const getBook = (id, callback) => {
         const url = `${apiUrl}/getBook`;
         postRequest_v2(url, id, callback);}
 };
+//提交删除书本请求
+export const deleteBooks=(data,callback)=>{
+   const url=`${apiUrl}/deleteBooks`;
+   postRequest_v2(url,data,callback);
+};
+//提交增加书籍请求
+export const addBooks=(data,callback)=>{
+   const url=`${apiUrl}/addBooks`;
+   postRequest_v2(url,data,callback);
+};
+//提交更新书籍请求
+export const updateBooks=(data,callback)=>{
+    const url=`${apiUrl}/updateBooks`;
+    postRequest_v2(url,data,callback);
+}
