@@ -15,6 +15,7 @@ import LoginRoute from "./LoginRoute";
 import {history} from "./utils/history";
 import AdminRoute from "./AdminRoute";
 import {BookAdmin} from "./component/BookAdmin";
+import {UserAdmin} from "./component/UserAdmin";
 
 export class Nav extends React.Component{
 
@@ -38,6 +39,7 @@ export class Nav extends React.Component{
                   <PrivateRoute exact path="/order" component={Order}/>
                   <AdminRoute  exact path="/admin" component={Admin}/>
                   <AdminRoute exact path="/bookadmin" component={BookAdmin}/>
+                  <AdminRoute exact path="/useradmin" component={UserAdmin}/>
                    <Redirect from="/*" to="/"/>
                </Switch>
                     {/*<Route exact={true} path={"/"} component={Login}/>*/}

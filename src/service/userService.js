@@ -49,3 +49,21 @@ export const checkSession =(callback)=>{
         postRequest(url, {}, callback);
 
 }
+// export const getBooks = (data, callback) => {
+//     const url = `${apiUrl}/getBooks`;
+//     postRequest(url, data, callback);
+// };
+export const getUsers=(data,callback)=>{
+    const url=`${apiUrl}/getUsers`;
+    postRequest(url,data,callback);
+}
+
+export const disableUsers=(data,callback)=>{
+    const url=`${apiUrl}/disableUsers`;
+    postRequest(url,data,callback);
+}
+
+export const enableUsers=(data,callback)=>{
+    const url=`${apiUrl}/enableUsers`;
+    postRequest(url,data,callback);
+}

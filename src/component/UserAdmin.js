@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { Table, Input, Button, Space } from 'antd';
+import { Table, Input, Button, Space,message } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
 import {Head} from "./header";
+import {disableUsers, enableUsers, getUsers} from "../service/userService";
+import {getBooks} from "../service/bookService";
 
 export class UserAdmin extends React.Component {
     state = {
@@ -13,31 +15,85 @@ export class UserAdmin extends React.Component {
         data: [],
         selectedRowKeys:[]
     };
-    //删除书本
 
-    //获取所有书本并加入key项（值为id）
+    //获取所有User并加入key项（值为id）
     componentDidMount() {
         const callback = (data) => {
             //console.log(data);
             this.setState({data: data});
-            const book_group=[];
+            const user_group=[];
             for(let i=0;i<this.state.data.length;i++){
-                book_group.push(
+                user_group.push(
                     {
-                        key:this.state.data[i].id,
-                        name:this.state.data[i].name,
-                        author:this.state.data[i].author,
-                        image:this.state.data[i].image,
-                        isbn:this.state.data[i].isbn,
-                        inventory:this.state.data[i].inventory
+                        key:this.state.data[i].userId,
+                        username:this.state.data[i].username,
+                        usertype:this.state.data[i].userType,
+                        userstate:this.state.data[i].userstate
                     }
                 );
             }
-            this.setState({data:book_group});
+            this.setState({data:user_group});
         };
-
-        getBooks({"search": null}, callback);
+      //  getBooks({"search":null}, callback);
+      getUsers({"search":null},callback);
+      console.log(this.state.data);
     }
+
+    handleDisableUser=()=>{
+         let dataSource = [...this.state.data];
+         //判断是不是管理员
+         for(let i=0;i<this.state.selectedRowKeys.length;i++) {
+             const index = dataSource.findIndex((item) => item.key == this.state.selectedRowKeys[i]);
+             const user=dataSource[index];
+             if(user.usertype==1){
+                 message.info('无法对管理员进行操作');
+                 return;
+             }
+         }
+         //修改state
+        for(let i=0;i<this.state.selectedRowKeys.length;i++) {
+            const index = dataSource.findIndex((item) => item.key == this.state.selectedRowKeys[i]);
+            dataSource[index].userstate=1;
+        }
+        this.setState(
+            {data:dataSource}
+        );
+        let usergroup={
+            keySet:this.state.selectedRowKeys
+        }
+        const callback=(data)=>{
+            console.log(data);
+        }
+        disableUsers(usergroup,callback);
+    }
+    handleEnableUser=()=>{
+        let dataSource = [...this.state.data];
+        //判断是不是管理员
+        for(let i=0;i<this.state.selectedRowKeys.length;i++) {
+            const index = dataSource.findIndex((item) => item.key == this.state.selectedRowKeys[i]);
+            const user=dataSource[index];
+            if(user.usertype==1){
+                message.info('无法对管理员进行操作');
+                return;
+            }
+        }
+        //修改state
+        for(let i=0;i<this.state.selectedRowKeys.length;i++) {
+            const index = dataSource.findIndex((item) => item.key == this.state.selectedRowKeys[i]);
+            dataSource[index].userstate=0;
+        }
+        this.setState(
+            {data:dataSource}
+        );
+        let usergroup={
+            keySet:this.state.selectedRowKeys
+        }
+        const callback=(data)=>{
+            console.log(data);
+        }
+        enableUsers(usergroup,callback);
+    }
+
     //选择
     selectRow =(record) =>{
         const selectedRowKeys = [...this.state.selectedRowKeys];
@@ -130,52 +186,33 @@ export class UserAdmin extends React.Component {
         this.setState({ searchText: '' });
     };
 
+
+
     render() {
         //表单选项栏
         const columns = [
             {
-                title: 'Name',
-                dataIndex: 'name',
-                key: 'name',
-                width: '30%',
-                ...this.getColumnSearchProps('name'),
+                title: 'Username',
+                dataIndex: 'username',
+                key: 'username',
+                //width: '30%',
+                ...this.getColumnSearchProps('username'),
             },
             {
-                title: 'Author',
-                dataIndex: 'author',
-                key: 'author',
-                width: '20%',
-                ...this.getColumnSearchProps('author'),
+                title: 'Usertype',
+                dataIndex: 'usertype',
+                key: 'usertype',
+                //width: '20%',
+                //...this.getColumnSearchProps('usertype'),
             },
             {
-                title: 'Image',
-                dataIndex: 'image',
-                key:'image',
-                render: (record) =><img src={record} alt="" width="100px" />
-
-            },
-            {
-                title: 'Isbn',
-                dataIndex: 'isbn',
-                key:'isbn',
-                width: '20%',
-                ...this.getColumnSearchProps('isbn')
-            },
-            {
-                title: 'Inventory',
-                dataIndex: 'inventory',
-                key:'inventory',
-                width:'20%',
-                ...this.getColumnSearchProps('inventory')
+                title: 'Userstate',
+                dataIndex: 'userstate',
+                key:'userstate',
+                //width:'20%',
+                //...this.getColumnSearchProps('userstate')
             }
-            // {
-            //     title: 'Address',
-            //     dataIndex: 'address',
-            //     key: 'address',
-            //     ...this.getColumnSearchProps('address'),
-            //     sorter: (a, b) => a.address.length - b.address.length,
-            //     sortDirections: ['descend', 'ascend'],
-            // },
+
         ];
         //选择用的东西
         const { selectedRowKeys } = this.state.selectedRowKeys;
@@ -191,8 +228,11 @@ export class UserAdmin extends React.Component {
         return (
             <div>
                 <Head/>
-                <Button type="primary"  disabled={!hasSelected} >
-                    删除选中项
+                <Button type="primary"  disabled={!hasSelected} onClick={this.handleDisableUser}>
+                    禁用选中用户
+                </Button>
+                <Button type="primary"  disabled={!hasSelected} onClick={this.handleEnableUser}>
+                    解禁选中用户
                 </Button>
                 <Table  rowSelection={rowSelection} columns={columns} dataSource={this.state.data}   onClick={(record) => ({
                     onClick: () => {

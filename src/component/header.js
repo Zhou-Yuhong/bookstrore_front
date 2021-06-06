@@ -86,6 +86,7 @@ class Cart extends React.Component{
                         <ul>
                             <Ulinner name={"你好,管理员大哥" + user.username} url="#"/>)
                             <Ulinner name={"书籍管理页面"} url="/bookadmin"/>
+                            <Ulinner name={"用户管理页面"} url="/useradmin"/>
                             <Ulinner name="主页" url="/home"/>
                             <button onClick={userService.logout}>退出登录</button>
                         </ul>
