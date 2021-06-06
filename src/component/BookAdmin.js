@@ -4,7 +4,7 @@ import 'antd/dist/antd.css';
 import { Table, Input, Button, Space,Popconfirm, Form } from 'antd';
 import Highlighter from 'react-highlight-words';
 import { SearchOutlined } from '@ant-design/icons';
-import {getBooks} from "../service/bookService";
+import {getBooks,deleteBooks,updateBooks,addBooks} from "../service/bookService";
 import {Head} from "./header";
 const EditableContext = React.createContext(null);
 const EditableRow = ({ index, ...props }) => {
@@ -135,6 +135,7 @@ export class BookAdmin extends React.Component {
                 title: 'Image',
                 dataIndex: 'image',
                 key:'image',
+                editable: true,
                 render: (record) =><img src={record} alt="" width="100px" />
 
             },
@@ -171,13 +172,75 @@ export class BookAdmin extends React.Component {
         selectedRowKeys:[],
         maxkey:0
     };
-    //删除单个书本
-    handleDelete = (key) => {
-        const dataSource = [...this.state.data];
-        this.setState({
-            data: dataSource.filter((item) => item.key !== key),
-        });
+    //删除书本并提交请求
+    handleDelete = () => {
+        console.log("delete");
+        let dataSource = [...this.state.data];
+        let deBooks=[];
+        for(let i=0;i<this.state.selectedRowKeys.length;i++){
+            //先根据key数组，找到对应书本加入到deleteBooks中
+            const index=dataSource.findIndex((item)=>item.key==this.state.selectedRowKeys[i]);
+            const book=dataSource[index];
+            deBooks.push(book);
+            //去除item
+            dataSource.splice(index,1);
+        }
+        console.log(dataSource);
+
+        this.setState(
+            {data:dataSource}
+        );
+        console.log(this.state.data);
+        const callback=(data)=>{
+            //TODO 以后可能需要完善callback
+            console.log(data);
+        }
+        let DeBooks={
+            deletebooks:deBooks
+        }
+        //提交删除请求
+        deleteBooks(DeBooks,callback);
+        // this.setState({
+        //     data: dataSource.filter((item) => item.key !== key),
+        // });
     };
+    //提交更新书本信息的请求
+    handleUpdate=()=>{
+
+        let dataSource=[...this.state.data];
+        let upBooks=[];
+        for(let i=0;i<this.state.selectedRowKeys.length;i++){
+            const index=dataSource.findIndex((item)=>item.key==this.state.selectedRowKeys[i]);
+            const book=dataSource[index];
+            upBooks.push(book);
+        }
+        const callback=(data)=>{
+            //TODO
+            console.log(data);
+        }
+        let UpBooks={
+            updatebooks:upBooks
+        }
+        updateBooks(UpBooks,callback);
+    }
+    //提交增加书本的请求，要先勾选要提交的
+    handleAddBooks=()=>{
+        let dataSource=[...this.state.data];
+        let adBooks=[];
+        for(let i=0;i<this.state.selectedRowKeys.length;i++){
+            const index=dataSource.findIndex((item)=>item.key==this.state.selectedRowKeys[i]);
+            const book=dataSource[index];
+            adBooks.push(book);
+        }
+        const callback=(data)=>{
+            //TODO
+            console.log(data);
+        }
+        let AdBooks={
+            addbooks:adBooks
+        }
+        addBooks(AdBooks,callback);
+    }
     //增加一个书本供编辑
     handleAdd = ()=> {
        const maxkey=this.state.maxkey;
@@ -189,7 +252,7 @@ export class BookAdmin extends React.Component {
            author:`周昱宏`,
            price:2.33,
            description:`do not go gentle into that night`,
-           image:`#`,
+           image:`https://github.com/Zhou-Yuhong`,
            isbn:`12138`,
            inventory:0
        };
@@ -200,7 +263,7 @@ export class BookAdmin extends React.Component {
            }
        );
     };
-    //保存
+    //修改后自动保存本地
     handleSave=(row)=>{
         const newData=[...this.state.data];
         const index=newData.findIndex((item) => row.key === item.key);
@@ -373,20 +436,24 @@ export class BookAdmin extends React.Component {
         return (
             <div>
                 <Head/>
-                <Button type="primary"  disabled={!hasSelected} >
+                <Button type="primary"  disabled={!hasSelected} onClick={this.handleDelete}>
                     删除选中项
                 </Button>
                 <Button
                     onClick={this.handleAdd}
-                    disabled={!hasSelected}
                     type="primary"
                     style={{
                         marginBottom: 16,
                     }}
                 >
-                    增加选中项
+                    新增一行
                 </Button>
-                <Button type="primary"  disabled={!hasSelected} >
+
+                <Button type="primary"  disabled={!hasSelected} onClick={this.handleAddBooks}>
+                    提交新增书籍
+                </Button>
+
+                <Button type="primary"  disabled={!hasSelected} onClick={this.handleUpdate}>
                     更新选中项
                 </Button>
             <Table  components={components}
