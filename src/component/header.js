@@ -1,7 +1,6 @@
 import React from 'react';
 import '../css/style.css';
-import * as userService from '../service/userService';
-import {Link} from 'react-router-dom';
+import * as userService from '../service/userService';;
 class Logo extends React.Component{
     constructor() {
         super();
@@ -87,6 +86,7 @@ class Cart extends React.Component{
                             <Ulinner name={"你好,管理员大哥" + user.username} url="#"/>)
                             <Ulinner name={"书籍管理页面"} url="/bookadmin"/>
                             <Ulinner name={"用户管理页面"} url="/useradmin"/>
+                            <Ulinner name={"订单管理页面"} url="/orderadmin"/>
                             <Ulinner name="主页" url="/home"/>
                             <button onClick={userService.logout}>退出登录</button>
                         </ul>

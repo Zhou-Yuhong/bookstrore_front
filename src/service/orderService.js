@@ -11,3 +11,11 @@ export const setOrders=(data,callback)=>{
     console.log("提交订单"+url);
     postRequest(url,data,callback);
 }
+// export const getBooks = (data, callback) => {
+//     const url = `${apiUrl}/getBooks`;
+//     postRequest(url, data, callback);
+// };
+export const getAllOrders=(data,callback)=>{
+    const url=`${apiUrl}/getAllOrders`;
+    postRequest(url,data,callback);
+}
