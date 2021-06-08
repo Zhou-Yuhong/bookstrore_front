@@ -34,7 +34,7 @@ h1#logo a{ display:block; height:64px; text-indent: -4000px; background:url(../i
 
 .shell { width:960px; margin:0 auto; padding:10px; background:#fff; }
 
-#header { height:64px; background:#8b0000; position:relative;}
+#header { height:130px; background:#8b0000; position:relative;}
 
 #navigation { float:right; white-space:nowrap; }
 #navigation ul{ list-style-type: none; height:64px; font-weight: bold; float:left;}

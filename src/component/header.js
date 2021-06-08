@@ -74,6 +74,7 @@ class Cart extends React.Component{
                             <Ulinner name={"你好  " + user.username} url="#"/>)
                             <Ulinner name="我的订单" url="/order"/>
                             <Ulinner name="主页" url="/home"/>
+                            <Ulinner name="统计" url="/analysis"/>
                             <button onClick={userService.logout}>退出登录</button>
                         </ul>
                     </div>
@@ -87,6 +88,7 @@ class Cart extends React.Component{
                             <Ulinner name={"书籍管理页面"} url="/bookadmin"/>
                             <Ulinner name={"用户管理页面"} url="/useradmin"/>
                             <Ulinner name={"订单管理页面"} url="/orderadmin"/>
+                            <Ulinner name="统计" url="/analysis"/>
                             <Ulinner name="主页" url="/home"/>
                             <button onClick={userService.logout}>退出登录</button>
                         </ul>

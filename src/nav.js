@@ -17,6 +17,7 @@ import AdminRoute from "./AdminRoute";
 import {BookAdmin} from "./component/BookAdmin";
 import {UserAdmin} from "./component/UserAdmin";
 import {OrderAdmin} from "./component/OrderAdmin";
+import {Analysis} from "./component/analysis";
 
 export class Nav extends React.Component{
 
@@ -38,6 +39,7 @@ export class Nav extends React.Component{
                   <PrivateRoute  path="/goods*" component={Goods}/>
                   <PrivateRoute exact path="/cart" component={Cart}/>
                   <PrivateRoute exact path="/order" component={Order}/>
+                  <PrivateRoute exact path="/analysis" component={Analysis}/>
                   <AdminRoute  exact path="/admin" component={Admin}/>
                   <AdminRoute exact path="/bookadmin" component={BookAdmin}/>
                   <AdminRoute exact path="/useradmin" component={UserAdmin}/>
