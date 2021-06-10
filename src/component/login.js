@@ -2,6 +2,7 @@ import  '../css/login.css';
 import React from 'react';
 import {Link} from "react-router-dom";
 import * as userService from '../service/userService'
+import {Button} from "antd";
 import Nav from"../nav"
 export class Inputbox extends React.Component{
     constructor(props) {
@@ -104,7 +105,7 @@ export class Login extends  React.Component{
             }}>
 
                 <h2>Login</h2>
-                <form className="form-box">
+                <form className="form-box" onSubmit={this.handleSubmit}>
                     <div className="inputBox">
                         <input type="text" value={this.state.username} onChange={this.handle_input_username} name required />
                         <label>Username</label>
@@ -113,12 +114,14 @@ export class Login extends  React.Component{
                         <input type="password" value={this.state.password}  onChange={this.handle_input_pwd}  name required />
                         <label>Password</label>
                     </div>
-                    <Link to={"/home"}>
-                        <input type="submit" onClick={this.handleSubmit} name value="登录" />
-                    </Link>
-                    <Link to={"register"}>
-                    <input type="submit" onClick={this.handleRegister} name value="注册" />
-                    </Link>
+                    <div>
+                        {/*<Link* to/>有坑*/}
+                        <input type="submit" name value="登录" />
+
+                    {/*<Link to={"register"}>*/}
+                    <input className="register" onClick={this.handleRegister} name value="注册" />
+                    </div>
+                    {/*</Link>*/}
                 </form>
             </div>
         );
