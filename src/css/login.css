@@ -57,7 +57,7 @@
 }
 .loginbox input[type='submit']{
     /* new added */
-    float:left;  
+    float:left;
     margin-left: 20%;
     background: transparent;
     border:1px solid black;
@@ -72,7 +72,7 @@
     left: 50%;
 
 }
-.loginbox input[type='button']{
+.loginbox .register{
     /* new added */
     float:left;
     margin-left: 20%;
@@ -89,6 +89,7 @@
     left: 50%;
 
 }
+
 
 .subitems{
 

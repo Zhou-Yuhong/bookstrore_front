@@ -65,7 +65,7 @@ class Cart extends React.Component{
 
     render(){
         const user=JSON.parse(localStorage.getItem("user"));
-        //console.log("user"+user);
+        console.log("user"+user);
         if(user!=null){
             if(user.userType==0) {
                 return (

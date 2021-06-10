@@ -13,13 +13,14 @@ export default class PrivateRoute extends React.Component{
     }
 
     checkAuth = (data) => {
-        //console.log(data);
+
         if (data.status >= 0) {
             this.setState({isAuthed: true, hasAuthed: true});
             const user=JSON.parse(localStorage.getItem("user"));
             if(user==null){
                 localStorage.setItem("user",JSON.stringify(data.auth));
             }
+            console.log(data);
         } else {
             // message.error(data.msg);
             //TODO 信息处理

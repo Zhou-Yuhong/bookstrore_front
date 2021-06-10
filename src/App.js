@@ -13,14 +13,6 @@ import {Nav} from "./nav"
 function App() {
   return (
     <div>
-    {/*  <Router>*/}
-    {/*    <div>*/}
-    {/*    <Route exact={true} path={"/"} component={Login}/>*/}
-    {/*    <Route path={"/home"} component={Home}/>*/}
-    {/*    <Route path={"/cart"} component={Cart}/>*/}
-    {/*    <Route path={"/goods"} component={Goods}/>*/}
-    {/*</div>*/}
-    {/*  </Router>*/}
     <Nav/>
     </div>
   );

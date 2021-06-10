@@ -3,8 +3,8 @@ import './App.css';
 import './css/style.css';
 //import {HashRouter, Route,BrowserRouter as Router} from 'react-router-dom';
 import { Router, Route, Switch, Redirect} from 'react-router-dom';
-import {Home,Home2} from "./component/home";
-import {Login} from "./component/login"
+import {Home} from "./component/home";
+import {Login} from "./component/login2"
 import {Cart} from "./component/cart"
 import {Goods} from "./component/goods"
 import {Order} from "./component/order"
@@ -36,6 +36,7 @@ export class Nav extends React.Component{
                <Switch>
                   <PrivateRoute exact path="/" component={Home}/>
                   <LoginRoute exact path="/login" component={Login}/>
+                   <LoginRoute exact path="/register" component={Register}/>
                   <PrivateRoute  path="/goods*" component={Goods}/>
                   <PrivateRoute exact path="/cart" component={Cart}/>
                   <PrivateRoute exact path="/order" component={Order}/>
@@ -44,6 +45,7 @@ export class Nav extends React.Component{
                   <AdminRoute exact path="/bookadmin" component={BookAdmin}/>
                   <AdminRoute exact path="/useradmin" component={UserAdmin}/>
                   <AdminRoute exact path="/orderadmin" component={OrderAdmin}/>
+
                    <Redirect from="/*" to="/"/>
                </Switch>
                     {/*<Route exact={true} path={"/"} component={Login}/>*/}

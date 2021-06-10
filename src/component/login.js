@@ -67,9 +67,7 @@ export class Login extends  React.Component{
           username:this.state.username,
           password:this.state.password
       }
-      // console.log(this.state.username);
-      // console.log(this.state.password);
-      // console.log(values);
+
       userService.login(values);
     };
     handleRegister=(event)=>{
