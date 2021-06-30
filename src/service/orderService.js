@@ -19,3 +19,13 @@ export const getAllOrders=(data,callback)=>{
     const url=`${apiUrl}/getAllOrders`;
     postRequest(url,data,callback);
 }
+//根据时间返回订单
+export const getDateOrders=(data,callback)=>{
+    const url=`${apiUrl}/getDateOrders`;
+    postRequest(url,data,callback);
+}
+//根据商品返回订单
+export const getProductOrders=(data,callback)=>{
+    const url=`${apiUrl}/getProductOrders`;
+    postRequest(url,data,callback);
+}

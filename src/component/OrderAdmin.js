@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import {Table, Badge, Menu, Dropdown, Space, Input, Button} from 'antd';
+import {Table, Badge, Menu, Dropdown, Space, Input, Button,DatePicker} from 'antd';
 import {Head} from "./header";
-import {getAllOrders} from "../service/orderService";
+import {getAllOrders,getDateOrders,getProductOrders} from "../service/orderService";
 import {SearchOutlined} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
+const { RangePicker } = DatePicker;
   function Order(key,id,num,order_time,state,userid,value,order_products){
       this.key=key;
       this.id=id;
@@ -139,10 +140,19 @@ export class OrderAdmin extends React.Component{
      state={
          searchText: '',
          searchedColumn: '',
-         data:[],  //存放总数据
-
-         if_load:false
+         data:[],  //存放所有数据
+         date:[],  //存放日期
+         TimeData:[],//根据日期筛选出的订单
+         ProductData:[],//根据具体的商品筛选的订单
+         // if_load:false
      }
+    onChange=(value,dataString)=>{
+        console.log(value);
+        console.log(dataString);
+        this.setState(
+            {date:dataString}
+        )
+    }
     //筛选api
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -222,17 +232,24 @@ export class OrderAdmin extends React.Component{
         this.setState({ searchText: '' });
     };
 
-     componentDidMount() {
-         const callback=(data)=>{
+     renderAllOrders=()=>{
+         if(this.state.data.length==0) return null;
+         else return   <Table
+             columns={this.columns}
+             expandable={{expandedRowRender}}
+             dataSource={this.state.data}
+         />
+     }
+     askAllOrders=()=>{
+         const callback=(data)=> {
              this.setState(
                  {
-                     data:data,
-                     if_load:true
+                     data: data
                  }
              )
-             let orders=[];
-             for(let i=0;i<this.state.data.length;i++){
-                 let order=new Order(
+             let orders = [];
+             for (let i = 0; i < this.state.data.length; i++) {
+                 let order = new Order(
                      this.state.data[i].order_info.id,
                      this.state.data[i].order_info.id,
                      this.state.data[i].order_info.num,
@@ -246,25 +263,78 @@ export class OrderAdmin extends React.Component{
              }
              this.setState(
                  {
-                     data:orders
+                     data: orders
                  }
              )
              console.log(data);
          }
-     //      getBooks({"search": null}, callback);
-         getAllOrders({"search": null},callback);
+           getAllOrders({"search": null},callback);
      }
-
+     askTimeOrders=()=>{
+         const callback=(data)=> {
+             let orders = [];
+             for (let i = 0; i < data.length; i++) {
+                 let order = new Order(
+                     data[i].order_info.id,
+                     data[i].order_info.id,
+                     data[i].order_info.num,
+                     data[i].order_info.order_time,
+                     data[i].order_info.state,
+                     data[i].order_info.userid,
+                     data[i].order_info.value,
+                     data[i].order_products
+                 );
+                 orders.push(order);
+             }
+             this.setState(
+                 {
+                     TimeData: orders
+                 }
+             )
+             console.log(data);
+         }
+         let ask={
+             date:this.state.date
+         }
+         getDateOrders(ask,callback);
+     }
+    renderTimeOrders=()=>{
+        if(this.state.TimeData.length==0) return null;
+        else return   <Table
+            columns={this.columns}
+            expandable={{expandedRowRender}}
+            dataSource={this.state.TimeData}
+        />
+    }
      render() {
-         if(this.state.if_load==false) return null;
+         // if(this.state.if_load==false) return null;
          return(
              <div>
                  <Head/>
-             <Table
-                 columns={this.columns}
-                 expandable={{expandedRowRender}}
-                 dataSource={this.state.data}
-             />
+                 <RangePicker
+                     format="YYYY年MM月DD日"
+                     onChange={this.onChange}
+                     dateRender={current => {
+                         const style = {};
+                         if (current.date() === 1) {
+                             style.border = '1px solid #1890ff';
+                             style.borderRadius = '50%';
+                         }
+                         return (
+                             <div className="ant-picker-cell-inner" style={style}>
+                                 {current.date()}
+                             </div>
+                         );
+                     }}
+                 />
+                 <Button onClick={this.askTimeOrders}>
+                     统计日期内订单
+                 </Button>
+                 <Button onClick={this.askAllOrders}>
+                     统计所有订单
+                 </Button>
+                 {this.renderAllOrders()}
+                 {this.renderTimeOrders()}
              </div>
          );
      }

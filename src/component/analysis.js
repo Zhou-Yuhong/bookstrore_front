@@ -14,7 +14,6 @@ export class Analysis extends React.Component{
         bookPurchase:[],//个人的书籍购买情况
         bookAnalysis:[],//各种书的销售情况
         userAnalysis:[]  //各个用户的统计
-
     }
     onChange=(value,dataString)=>{
         console.log(value);

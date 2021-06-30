@@ -6,7 +6,12 @@ export const getBooks = (data, callback) => {
     const url = `${apiUrl}/getBooks`;
     postRequest(url, data, callback);
 };
+export const getPageBooks=(data,callback)=>{
+    const url=`${apiUrl}/getPageBooks`;
 
+    console.log(data);
+    postRequest(url,data,callback);
+}
 export const getBook = (id, callback) => {
     console.log(id);
     if(typeof id=='number'){

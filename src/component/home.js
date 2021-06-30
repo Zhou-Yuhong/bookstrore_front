@@ -35,8 +35,6 @@ export class Home extends React.Component{
         <div className="shell">
             <Head/>
             <Content/>
-            {/*<Side_full/>*/}
-            <Footer/>
         </div>);
 
     }

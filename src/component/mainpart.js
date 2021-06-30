@@ -1,9 +1,8 @@
 import React from 'react';
 import '../css/style.css';
 import {Ulinner} from "./header";
-import {getBooks} from "../service/bookService";
-import {Side_full} from "./bottom.js"
-import {Switch} from "react-router-dom";
+import {getBooks, getPageBooks} from "../service/bookService";
+import {Pagination} from "antd";
 // <Product_Info url="#" src= {"img/threebody1.jpg"} data="科幻系列" data2="三体1" data3="地球往事" data4="23.33"/>
 const home_book1={
     url: "#",src:"img/threebody1.jpg",name1:"三体1" ,name2: "地球往事",writer:"刘慈欣",money:23.33,series:"科幻系列"
@@ -298,8 +297,7 @@ export class Content extends React.Component{
             product_array:[],
             search:false,
             search_array:[],
-            // search_lower_bound:0,
-            // search_upper_bound:500
+            current_page:1
         }
     }
     componentDidMount() {
@@ -309,10 +307,11 @@ export class Content extends React.Component{
             this.setState({product_array:data});
         };
 
-        getBooks({"search":null}, callback);
-        const user=JSON.parse(localStorage.getItem("user"));
-        //console.log("内存的user"+user.username);
-        //console.log(this.state.product_array)
+        let Page={
+            page:this.state.current_page
+        }
+        getPageBooks(Page,callback);
+
         }
     //退出搜索模式
     clear_search=()=>{
@@ -341,21 +340,43 @@ export class Content extends React.Component{
         )
         console.log(this.state.search);
     }
-    //显示所有书籍
+    //显示书籍
     render_product=(books)=>{
         let bk_array=[];
-        if(books===undefined) return;
-        books.map(
-            (it,index)=>{
-                bk_array.push(
-                    <Product_Info
-                    book={it}
-                    />
-                )
-            }
-        );
+        if(books.length===0) return;
+        for(let i=0;i<books.length;i++){
+            bk_array.push(
+                <Product_Info book={books[i]}/>
+            )
+        }
+        // books.map(
+        //     (it,index)=>{
+        //         bk_array.push(
+        //             <Product_Info
+        //             book={it}
+        //             />
+        //         )
+        //     }
+        // );
         return bk_array;
     }
+    //根据页数更改发送请求更改现有页
+    changePage= page=>{
+        console.log(page);
+        this.setState(
+            {current_page:page}
+        );
+        const callback=(data)=>{
+            this.setState(
+                {product_array:data}
+            )
+        }
+        let Page={
+            page:page
+        }
+        getPageBooks(Page,callback);
+    }
+
 
     render(){
         return(
@@ -389,6 +410,8 @@ export class Content extends React.Component{
                         }
                         <div className="cl">&nbsp;</div>
                     </div>
+                    {/*分页栏*/}
+                    <Pagination current={this.state.current_page} onChange={this.changePage} total={50}/>
                 </div>
                 <div id="sidebar">
                     <Searchbox parent={this}/>
