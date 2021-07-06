@@ -7,7 +7,7 @@ import {Home} from "./component/home";
 import {Login} from "./component/login2"
 import {Cart} from "./component/cart"
 import {Goods} from "./component/goods"
-import {Order} from "./component/order"
+import {UserOrder} from "./component/order"
 import {Register} from "./component/register"
 import {Admin} from "./component/admin"
 import PrivateRoute from "./PrivateRoute";
@@ -39,7 +39,7 @@ export class Nav extends React.Component{
                    <LoginRoute exact path="/register" component={Register}/>
                   <PrivateRoute  path="/goods*" component={Goods}/>
                   <PrivateRoute exact path="/cart" component={Cart}/>
-                  <PrivateRoute exact path="/order" component={Order}/>
+                  <PrivateRoute exact path="/order" component={UserOrder}/>
                   <PrivateRoute exact path="/analysis" component={Analysis}/>
                   <AdminRoute  exact path="/admin" component={Admin}/>
                   <AdminRoute exact path="/bookadmin" component={BookAdmin}/>

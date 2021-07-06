@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import {Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, message} from 'antd';
 import * as userService from '../service/userService'
+import {history} from "../utils/history";
+import {CheckUsername} from "../service/userService";
 const { Option } = Select;
 const formItemLayout = {
     labelCol: {
@@ -62,7 +64,20 @@ const RegistrationForm = () => {
             </Select>
         </Form.Item>
     );
-
+    const checkUsername=(e)=>{
+        let data={
+            username:e.target.value
+        }
+        const callback=(data)=>{
+            console.log(data);
+            if(data==true){
+            }
+            else{
+                message.info("该用户名已存在,请更换用户名");
+            }
+        }
+        CheckUsername(data,callback);
+    }
 
 
     return (
@@ -88,7 +103,7 @@ const RegistrationForm = () => {
                     },
                 ]}
             >
-                <Input />
+                <Input onChange={checkUsername}/>
             </Form.Item>
             <Form.Item
                 name="email"

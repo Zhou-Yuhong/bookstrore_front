@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
-import {Table, Badge, Menu, Dropdown, Space, Input, Button,DatePicker} from 'antd';
+import {Table, Badge, Menu, Dropdown, Space, Input, Button,DatePicker,Tooltip} from 'antd';
 import {Head} from "./header";
-import {getAllOrders,getDateOrders,getProductOrders} from "../service/orderService";
+import {getAllOrders, getDateOrders, getOrderItems, getProductOrders} from "../service/orderService";
 import {SearchOutlined} from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 const { RangePicker } = DatePicker;
-  function Order(key,id,num,order_time,state,userid,value,order_products){
+  function Order(key,id,num,order_time,state,userid,value){
       this.key=key;
       this.id=id;
       this.num=num;
@@ -15,86 +15,71 @@ const { RangePicker } = DatePicker;
       this.state=state;
       this.userid=userid;
       this.value=value;
-      this.order_products=order_products;
   }
- const expandedRowRender=(record)=>{
-    const columns=[
-        {
-            title:'Product_id',
-            dataIndex:'product_id',
-            key:'product_id'
-        },
-        {
-            title: 'Name',
-            dataIndex: 'name',
-            key:'name'
-        },
-        {
-            title: 'Num',
-            dataIndex: 'num',
-            key:'num'
-        },
-        {
-            title: 'Price',
-            dataIndex: 'price',
-            key:'price'
-        },
-        {
-            title: 'Image',
-            dataIndex: 'image',
-            key:'image',
-            render: (record) =><img src={record} alt="" width="100px" />
-        }, {
-            title: 'Author',
-            dataIndex: 'author',
-            key:'author'
-        }
-    ]
-    return <Table columns={columns} dataSource={record.order_products} pagination={false} />;
+const text = <span>prompt text</span>;
+
+
+
+class ChildTable extends React.Component{
+    constructor(props) {
+        super(props);
+        this.columns = [
+            {
+                title: 'Product_id',
+                dataIndex: 'product_id',
+                key: 'product_id'
+            },
+            {
+                title: 'Name',
+                dataIndex: 'name',
+                key: 'name'
+            },
+            {
+                title: 'Num',
+                dataIndex: 'num',
+                key: 'num'
+            },
+            {
+                title: 'Price',
+                dataIndex: 'price',
+                key: 'price'
+            },
+            {
+                title: 'Image',
+                dataIndex: 'image',
+                key: 'image',
+                render: (record) => <img src={record} alt="" width="100px"/>
+            }, {
+                title: 'Author',
+                dataIndex: 'author',
+                key: 'author'
+            }
+        ]
+    }
+    state={
+        data:[]
+    }
+    componentDidMount() {
+        const callback=(data)=>{
+            this.setState({
+                data:data
+            })
+     }
+     const orderID={
+        order_id:this.props.id
+     }
+     getOrderItems(orderID,callback);
+
+    }
+    render() {
+        if(this.state.data.length==0) return null;
+        else
+        return <Table columns={this.columns} dataSource={this.state.data} pagination={false} />;
+    }
 }
-// class NesredTable extends React.Component{
-//     constructor() {
-//         super();
-//         this.state={
-//             data:this.props.data
-//         }
-//         this.columns=[
-//             {
-//                 title:'Product_id',
-//                 dataIndex:'product_id',
-//                 key:'product_id'
-//             },
-//             {
-//                 title: 'Name',
-//                 dataIndex: 'name',
-//                 key:'name'
-//             },
-//             {
-//                 title: 'Num',
-//                 dataIndex: 'num',
-//                 key:'num'
-//             },
-//             {
-//                 title: 'Price',
-//                 dataIndex: 'price',
-//                 key:'price'
-//             },
-//             {
-//                 title: 'Image',
-//                 dataIndex: 'image',
-//                 key:'image',
-//                 render: (record) =><img src={record} alt="" width="100px" />
-//             }, {
-//                 title: 'Author',
-//                 dataIndex: 'author',
-//                 key:'author'
-//             }
-//         ]
-//     }
-//     render(){
-//         return <Table columns={this.columns} dataSource={this.state.data} pagination={false} />;
-//     }
-// }
+const expandedRowRender=(record)=>{
+    return <ChildTable id={record.id}/>
+}
 export class OrderAdmin extends React.Component{
      constructor() {
          super();
@@ -144,7 +129,8 @@ export class OrderAdmin extends React.Component{
          date:[],  //存放日期
          TimeData:[],//根据日期筛选出的订单
          ProductData:[],//根据具体的商品筛选的订单
-         // if_load:false
+         expandVisible: {},
+         expandedData:{},
      }
     onChange=(value,dataString)=>{
         console.log(value);
@@ -153,6 +139,7 @@ export class OrderAdmin extends React.Component{
             {date:dataString}
         )
     }
+
     //筛选api
     getColumnSearchProps = dataIndex => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -234,12 +221,29 @@ export class OrderAdmin extends React.Component{
 
      renderAllOrders=()=>{
          if(this.state.data.length==0) return null;
-         else return   <Table
+         else return   <div >
+             <Tooltip placement="top" title={text}>
+                 所有订单表
+             </Tooltip>
+             <Table
              columns={this.columns}
              expandable={{expandedRowRender}}
              dataSource={this.state.data}
-         />
+             />
+         </div>
      }
+    renderTimeOrders=()=>{
+        if(this.state.TimeData.length==0) return null;
+        else return<div>
+            <Tooltip placement="top" title={text}>
+               指定日期内订单
+            </Tooltip>
+            <Table
+            columns={this.columns}
+            expandable={{expandedRowRender}}
+            dataSource={this.state.TimeData}
+        /></div>
+    }
      askAllOrders=()=>{
          const callback=(data)=> {
              this.setState(
@@ -250,14 +254,13 @@ export class OrderAdmin extends React.Component{
              let orders = [];
              for (let i = 0; i < this.state.data.length; i++) {
                  let order = new Order(
-                     this.state.data[i].order_info.id,
-                     this.state.data[i].order_info.id,
-                     this.state.data[i].order_info.num,
-                     this.state.data[i].order_info.order_time,
-                     this.state.data[i].order_info.state,
-                     this.state.data[i].order_info.userid,
-                     this.state.data[i].order_info.value,
-                     this.state.data[i].order_products
+                     this.state.data[i].id,
+                     this.state.data[i].id,
+                     this.state.data[i].num,
+                     this.state.data[i].order_time,
+                     this.state.data[i].state,
+                     this.state.data[i].userid,
+                     this.state.data[i].value
                  );
                  orders.push(order);
              }
@@ -275,14 +278,13 @@ export class OrderAdmin extends React.Component{
              let orders = [];
              for (let i = 0; i < data.length; i++) {
                  let order = new Order(
-                     data[i].order_info.id,
-                     data[i].order_info.id,
-                     data[i].order_info.num,
-                     data[i].order_info.order_time,
-                     data[i].order_info.state,
-                     data[i].order_info.userid,
-                     data[i].order_info.value,
-                     data[i].order_products
+                     data[i].id,
+                     data[i].id,
+                     data[i].num,
+                     data[i].order_time,
+                     data[i].state,
+                     data[i].userid,
+                     data[i].value
                  );
                  orders.push(order);
              }
@@ -298,14 +300,7 @@ export class OrderAdmin extends React.Component{
          }
          getDateOrders(ask,callback);
      }
-    renderTimeOrders=()=>{
-        if(this.state.TimeData.length==0) return null;
-        else return   <Table
-            columns={this.columns}
-            expandable={{expandedRowRender}}
-            dataSource={this.state.TimeData}
-        />
-    }
+
      render() {
          // if(this.state.if_load==false) return null;
          return(

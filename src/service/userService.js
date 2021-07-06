@@ -42,6 +42,10 @@ export const register=(data)=>{
     }
     postRequest(url,data,callback);
 }
+export const CheckUsername=(data,callback)=>{
+    const url=`${apiUrl}/checkUsername`;
+    postRequest(url,data,callback);
+}
 export const logout= () => {
     const url=`${apiUrl}/logout`;
     const callback=(data)=>{
@@ -65,10 +69,6 @@ export const checkSession =(callback)=>{
         postRequest(url, {}, callback);
 
 }
-// export const getBooks = (data, callback) => {
-//     const url = `${apiUrl}/getBooks`;
-//     postRequest(url, data, callback);
-// };
 export const getUsers=(data,callback)=>{
     const url=`${apiUrl}/getUsers`;
     postRequest(url,data,callback);

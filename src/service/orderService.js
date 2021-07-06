@@ -24,6 +24,11 @@ export const getDateOrders=(data,callback)=>{
     const url=`${apiUrl}/getDateOrders`;
     postRequest(url,data,callback);
 }
+//获得一个订单中的所有商品
+export const getOrderItems=(data,callback)=>{
+    const url=`${apiUrl}/getOrderItems`;
+    postRequest(url,data,callback);
+}
 //根据商品返回订单
 export const getProductOrders=(data,callback)=>{
     const url=`${apiUrl}/getProductOrders`;
