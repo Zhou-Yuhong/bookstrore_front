@@ -131,6 +131,7 @@ export class OrderAdmin extends React.Component{
          ProductData:[],//根据具体的商品筛选的订单
          expandVisible: {},
          expandedData:{},
+         productText:''
      }
     onChange=(value,dataString)=>{
         console.log(value);
@@ -218,7 +219,12 @@ export class OrderAdmin extends React.Component{
         clearFilters();
         this.setState({ searchText: '' });
     };
-
+    getProductText=(e)=>{
+        this.setState(
+            {productText:e.target.value}
+        )
+        console.log(this.state.productText)
+    }
      renderAllOrders=()=>{
          if(this.state.data.length==0) return null;
          else return   <div >
@@ -232,7 +238,7 @@ export class OrderAdmin extends React.Component{
              />
          </div>
      }
-    renderTimeOrders=()=>{
+     renderTimeOrders=()=>{
         if(this.state.TimeData.length==0) return null;
         else return<div>
             <Tooltip placement="top" title={text}>
@@ -243,6 +249,18 @@ export class OrderAdmin extends React.Component{
             expandable={{expandedRowRender}}
             dataSource={this.state.TimeData}
         /></div>
+    }
+    renderProductOrders=()=>{
+        if(this.state.ProductData.length==0) return null;
+        else return<div>
+            <Tooltip placement="top" title={text}>
+                {"包含"+this.state.productText+"的订单"}
+            </Tooltip>
+            <Table
+                columns={this.columns}
+                expandable={{expandedRowRender}}
+                dataSource={this.state.ProductData}
+            /></div>
     }
      askAllOrders=()=>{
          const callback=(data)=> {
@@ -300,7 +318,33 @@ export class OrderAdmin extends React.Component{
          }
          getDateOrders(ask,callback);
      }
-
+    askProductOrders=()=>{
+        const callback=(data)=> {
+            let orders = [];
+            for (let i = 0; i < data.length; i++) {
+                let order = new Order(
+                    data[i].id,
+                    data[i].id,
+                    data[i].num,
+                    data[i].order_time,
+                    data[i].state,
+                    data[i].userid,
+                    data[i].value
+                );
+                orders.push(order);
+            }
+            this.setState(
+                {
+                    ProductData:orders
+                }
+            )
+            console.log(data);
+        }
+        let ask={
+            productName:this.state.productText
+        }
+      getProductOrders(ask,callback);
+    }
      render() {
          // if(this.state.if_load==false) return null;
          return(
@@ -328,8 +372,13 @@ export class OrderAdmin extends React.Component{
                  <Button onClick={this.askAllOrders}>
                      统计所有订单
                  </Button>
+                 <Space/>
+                 <Input placeholder={"输入商品名进行搜索"} onChange={this.getProductText}/>
+                 <Button onClick={this.askProductOrders}>Search</Button>
                  {this.renderAllOrders()}
                  {this.renderTimeOrders()}
+                 {this.renderProductOrders()}
+
              </div>
          );
      }

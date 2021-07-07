@@ -240,14 +240,7 @@ class Payline extends React.Component{
             order_info:order_info,
             order_products:order_products
         }
-        // for(let j=0;j<totle;j++){
-        //     data["product_id"+j]=order_products[j].product_id;
-        //     data["name"+j]=order_products[j].name;
-        //     data["num"+j]=order_products[j].num;
-        //     data["price"+j]=order_products[j].price;
-        //     data["image"+j]=order_products[j].image;
-        //     data["author"+j]=order_products[j].author;
-        // }
+
         console.log(data);
         const callback=()=>{
             let accc=2333;

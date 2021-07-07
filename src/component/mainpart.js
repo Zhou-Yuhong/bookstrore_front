@@ -226,7 +226,7 @@ class Product_Info extends React.Component{
         return(
             <li>
                 {/*<a href={this.props.book.url}><img src={this.props.book.src} alt=""/></a>*/}
-                <a  href={"/goods?id="+this.id} className="product-img" ><img src={this.props.book.image} alt=""/></a>
+                <a  href={"/goods?id="+this.props.book.id} className="product-img" ><img src={this.props.book.image} alt=""/></a>
                 <div className="product-info">
                     <h3>书本信息</h3>
                     <div className="product-desc">
@@ -301,7 +301,7 @@ export class Content extends React.Component{
         }
     }
     componentDidMount() {
-
+        console.log("调用componentDidMount");
         const callback =  (data) => {
             //console.log(data);
             this.setState({product_array:data});
@@ -329,7 +329,7 @@ export class Content extends React.Component{
             return;
         }
         let tmp_cart=this.state.product_array;
-        let filter_cart=tmp_cart.filter((it)=>it.name1.search(str)!==-1||it.name2.search(str)!==-1);
+        let filter_cart=tmp_cart.filter((it)=>it.name.search(str)!==-1||it.author.search(str)!==-1);
         //tmp_cart=filter_cart.filter((it)=>it.money>=lower);
         //filter_cart=tmp_cart.filter((it)=>it.money<=upper);
         this.setState(
