@@ -2,6 +2,7 @@ import '../css/cart.css';
 import React from 'react';
 import  {Head} from './header';
 import {setOrders} from "../service/orderService";
+import{Popconfirm,message,Tooltip} from "antd";
 
 const cart_book1={
     src:"img/cart_book1.jpg",name:"骆驼祥子",writer:"老舍",piece:1,money:20.3,if_chosen:false,cart_id:0
@@ -199,6 +200,9 @@ class Payline extends React.Component{
         sum=this.props.sum;
         return sum;
     }
+    cancel=(e)=>{
+        message.success('取消提交');
+    }
     submit_order=(event)=>{
         const order=JSON.parse(localStorage.getItem("cart"));
         const user=JSON.parse(localStorage.getItem("user"));
@@ -222,12 +226,6 @@ class Payline extends React.Component{
         let year = date.getFullYear();
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        // if (month < 10) {
-        //     month = "0" + month;
-        // }
-        // if (day < 10) {
-        //     day = "0" + day;
-        // }
         let nowDate = year + "年" + month + "月" + day+"日";
         let order_info={
             userid:user.userId,
@@ -246,7 +244,7 @@ class Payline extends React.Component{
             let accc=2333;
         }
         setOrders(data,callback);
-        alert("订单已提交");
+        message.success('订单已提交');
     }
 
     render(){
@@ -269,9 +267,15 @@ class Payline extends React.Component{
 
                     <li>已经选择<span>{this.payline_itemnum()}</span>件商品</li>
                     <li>总价 <span>￥{this.props.sum}</span></li>
-                    <li>
-                        <button onClick={this.submit_order} className="butt">去结算</button>
-
+                    <li> <Popconfirm
+                        title="确认提交订单?"
+                        onConfirm={this.submit_order}
+                        onCancel={this.cancel}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <a className="butt">去结算</a>
+                    </Popconfirm>
                     </li>
 
                 </ul>

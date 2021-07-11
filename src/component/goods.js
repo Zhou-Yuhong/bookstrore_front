@@ -2,6 +2,8 @@ import React from 'react';
 import  {Head} from "./header";
 import '../css/style.css';
 import {getBook} from "../service/bookService";
+import {Button,Input} from'antd';
+import {Tooltip} from "antd/es";
 const book_modle={
     name:"活着",writer:"余华",price:"23.3",
     intro:"身处荒诞的世界，每个人都该读读余华。经典版本，带你读懂“活着”的力量"
@@ -134,11 +136,11 @@ export class Goods extends React.Component{
 
     }
     subpieces=(e)=>{
-        if(this.state.pieces===1) return;
+        if(this.state.num===1) return;
         let num=this.state.num;
         num--;
         this.setState(
-            {pieces:num}
+            {num:num}
         )
     }
     addTocart=(e)=>{
@@ -199,9 +201,13 @@ export class Goods extends React.Component{
                                 <li><h3>￥{this.state.book.price}</h3></li>
                                 <li>数量</li>
                                 <li className="num_li">
-                                    <button onClick={this.subpieces}> -</button>
-                                    <input value={this.state.num}/>
-                                    <button onClick={this.addpieces}>+</button>
+                                    <Button onClick={this.subpieces}   size="small"
+                                            style={{ width: 50 }}> -</Button>
+                                    {/*<input value={this.state.num}/>*/}
+                                    <Tooltip>{this.state.num}</Tooltip>
+                                    <Button onClick={this.addpieces}   size="small"
+                                            style={{ width: 50
+                                            }}>+</Button>
                                 </li>
                             </ul>
                         </div>

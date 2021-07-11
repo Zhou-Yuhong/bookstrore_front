@@ -456,6 +456,7 @@ export class BookAdmin extends React.Component {
                 <Button type="primary"  disabled={!hasSelected} onClick={this.handleUpdate}>
                     更新选中项
                 </Button>
+                <span><a href="https://github.com/Zhou-Yuhong/imgs/upload/main" target="_blank" rel="noopener noreferrer">上传图片至图床</a></span>
             <Table  components={components}
                     rowClassName={() => 'editable-row'}
                     bordered

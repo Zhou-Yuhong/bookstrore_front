@@ -20,8 +20,12 @@ export const login=(data)=>{
             //TODO 增加message处理
             message.info("登录成功");
         }
-        else{
+        else if(data.status==-2){
+
             //TODO 增加message处理
+            message.info("您的账号已被禁用");
+        }
+        else{
             message.info("登录失败");
         }
     };
